@@ -61,7 +61,7 @@ public class Consumer implements Runnable {
     }
 
     /**
-     *
+     * Produce goods whenever available.
      */
     @Override
     public void run() {
