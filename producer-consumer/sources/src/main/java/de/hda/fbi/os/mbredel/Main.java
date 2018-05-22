@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Main {
     /** The logger. */
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     /**
