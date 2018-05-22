@@ -46,6 +46,8 @@ public class Producer implements Runnable {
     private final String name;
     /** The queue the producer pushes its goods to. */
     private final GoodQueue queue;
+    /** A runner-variable to run the thread - and be able to stop it. */
+    private boolean isRunning;
 
     /**
      * The default constructor.
@@ -56,10 +58,13 @@ public class Producer implements Runnable {
     public Producer(String name, GoodQueue queue) {
         this.name = name;
         this.queue = queue;
+        this.isRunning = true;
     }
 
     /**
      * Create a good and put it in the queue
+     *
+     * @throws InterruptedException When the thread is interrupted while waiting.
      */
     public void produce() throws InterruptedException {
         Good good = new Good(GOOD_NAME, name, VALUE);
@@ -74,7 +79,7 @@ public class Producer implements Runnable {
     public void run() {
         Random random = new Random();
 
-        while(true) {
+        while(isRunning) {
             // Produce a good.
             try {
                 this.produce();

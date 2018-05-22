@@ -38,6 +38,8 @@ public class Consumer implements Runnable {
     private final String name;
     /** The queue the consumer gets its goods from. */
     private final GoodQueue queue;
+    /** A runner-variable to run the thread - and be able to stop it. */
+    private boolean isRunning;
 
     /**
      * The default constructor.
@@ -48,12 +50,13 @@ public class Consumer implements Runnable {
     public Consumer(String name, GoodQueue queue) {
         this.name = name;
         this.queue = queue;
+        this.isRunning = true;
     }
 
     /**
      * Consume good from the queue.
      *
-     * @throws InterruptedException
+     * @throws InterruptedException When the thread is interrupted while waiting.
      */
     public void consume() throws InterruptedException {
         Good good = queue.take();
@@ -65,7 +68,7 @@ public class Consumer implements Runnable {
      */
     @Override
     public void run() {
-        while(true) {
+        while(isRunning) {
             try {
                 this.consume();
             } catch (InterruptedException e) {
