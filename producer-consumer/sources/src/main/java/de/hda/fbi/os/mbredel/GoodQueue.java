@@ -71,7 +71,7 @@ public class GoodQueue {
      * Takes a good from the beginning of the queue.
      *
      * @return A good from the queue.
-     * @throws InterruptedException
+     * @throws InterruptedException When the thread is interrupted while waiting.
      */
     public Good take() throws InterruptedException {
         return queue.take();
