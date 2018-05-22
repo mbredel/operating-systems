@@ -80,6 +80,8 @@ public class Producer implements Runnable {
                 this.produce();
             } catch (InterruptedException e) {
                 LOGGER.info("Harsh wake-up due to an InterruptedException while waiting for a drained queue: ", e);
+                // Restore interrupted state...
+                Thread.currentThread().interrupt();
             }
 
             // Just wait for some time.
@@ -87,6 +89,8 @@ public class Producer implements Runnable {
                 Thread.sleep(random.nextInt(WAITING_TIME));
             } catch (InterruptedException e) {
                 LOGGER.info("Harsh wake-up due to an InterruptedException while sleeping: ", e);
+                // Restore interrupted state...
+                Thread.currentThread().interrupt();
             }
         }
 
