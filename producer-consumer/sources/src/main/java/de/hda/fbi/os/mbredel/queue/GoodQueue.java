@@ -19,7 +19,11 @@
  products derived from this software without specific prior written
  permission.
  */
-package de.hda.fbi.os.mbredel;
+package de.hda.fbi.os.mbredel.queue;
+
+import de.hda.fbi.os.mbredel.Consumer;
+import de.hda.fbi.os.mbredel.Good;
+import de.hda.fbi.os.mbredel.Producer;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -32,7 +36,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  *
  * @author Michael Bredel
  */
-public class GoodQueue {
+public class GoodQueue implements IQueue {
     /** The default queue size. */
     public static final int DEFAULT_QUEUE_SIZE = 5;
 
@@ -57,22 +61,12 @@ public class GoodQueue {
         queue = new LinkedBlockingQueue<>(queueSize);
     }
 
-    /**
-     * Adds a good to the end of the queue.
-     *
-     * @param good The good to add.
-     * @throws InterruptedException When the thread is interrupted while waiting.
-     */
+    @Override
     public void put(Good good) throws InterruptedException {
         queue.put(good);
     }
 
-    /**
-     * Takes a good from the beginning of the queue.
-     *
-     * @return A good from the queue.
-     * @throws InterruptedException When the thread is interrupted while waiting.
-     */
+    @Override
     public Good take() throws InterruptedException {
         return queue.take();
     }

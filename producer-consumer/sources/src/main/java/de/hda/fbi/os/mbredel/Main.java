@@ -21,6 +21,7 @@
  */
 package de.hda.fbi.os.mbredel;
 
+import de.hda.fbi.os.mbredel.queue.GoodQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
