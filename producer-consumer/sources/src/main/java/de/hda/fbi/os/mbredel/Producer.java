@@ -86,7 +86,8 @@ public class Producer implements Runnable {
                 this.produce();
             } catch (InterruptedException e) {
                 LOGGER.info("Harsh wake-up due to an InterruptedException while waiting for a drained queue: ", e);
-                // Restore interrupted state...
+                // Restore interrupted state. That is, set the interrupt flag of the thread, 
+                // so higher level interrupt handlers will notice it and can handle it appropriately.
                 Thread.currentThread().interrupt();
             }
 
@@ -95,7 +96,8 @@ public class Producer implements Runnable {
                 Thread.sleep(random.nextInt(WAITING_TIME));
             } catch (InterruptedException e) {
                 LOGGER.info("Harsh wake-up due to an InterruptedException while sleeping: ", e);
-                // Restore interrupted state...
+                // Restore interrupted state. That is, set the interrupt flag of the thread, 
+                // so higher level interrupt handlers will notice it and can handle it appropriately.
                 Thread.currentThread().interrupt();
             }
         }
