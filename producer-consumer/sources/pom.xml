@@ -78,25 +78,6 @@
             <artifactId>commons-math3</artifactId>
             <version>${apache.math3.version}</version>
         </dependency>
-        <!-- Plugin dependencies to automatically download and install the plugins needed. -->
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>${plugin.compiler.version}</version>
-            <type>maven-plugin</type>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-clean-plugin</artifactId>
-            <version>${plugin.clean.version}</version>
-            <type>maven-plugin</type>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-shade-plugin</artifactId>
-            <version>${plugin.shade.version}</version>
-            <type>maven-plugin</type>
-        </dependency>
     </dependencies>
 
 </project>
