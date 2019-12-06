@@ -24,6 +24,8 @@ package de.hda.fbi.os.mbredel.queue;
 import de.hda.fbi.os.mbredel.Consumer;
 import de.hda.fbi.os.mbredel.Good;
 import de.hda.fbi.os.mbredel.Producer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -37,6 +39,9 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @author Michael Bredel
  */
 public class GoodQueue implements IQueue {
+    /** The logger. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(GoodQueue.class);
+
     /** The default queue size. */
     public static final int DEFAULT_QUEUE_SIZE = 5;
 
@@ -64,10 +69,13 @@ public class GoodQueue implements IQueue {
     @Override
     public void put(Good good) throws InterruptedException {
         queue.put(good);
+        LOGGER.info("Added [{}] to queue. Queue size is now: {}", good.getName(), queue.size());
     }
 
     @Override
     public Good take() throws InterruptedException {
-        return queue.take();
+        Good good = queue.take();
+        LOGGER.info("Removed a good [{}] from queue. Queue size is now: {}", good.getName(), queue.size());
+        return good;
     }
 }
