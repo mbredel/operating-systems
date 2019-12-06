@@ -21,7 +21,7 @@
  */
 package de.hda.fbi.os.mbredel;
 
-import de.hda.fbi.os.mbredel.queue.GoodQueue;
+import de.hda.fbi.os.mbredel.queue.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +45,8 @@ public class Main {
     public static void main(String[] args) {
 
         // Initiate a new queue for goods.
-        GoodQueue goodQueue = new GoodQueue();
+        //IQueue goodQueue = new GoodQueue();
+        IQueue goodQueue = new QueueSemaphore();
 
         // Create producer.
         Producer beerProducer = new Producer("NiceBeer", goodQueue);
