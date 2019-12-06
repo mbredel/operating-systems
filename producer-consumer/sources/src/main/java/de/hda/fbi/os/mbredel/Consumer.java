@@ -21,7 +21,8 @@
  */
 package de.hda.fbi.os.mbredel;
 
-import de.hda.fbi.os.mbredel.queue.GoodQueue;
+import de.hda.fbi.os.mbredel.queue.IQueue;
+import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,13 +35,17 @@ import org.slf4j.LoggerFactory;
 public class Consumer implements Runnable {
     /** The logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(Consumer.class);
+    /** The average waiting time in ms.*/
+    private static final int WAITING_TIME = 2000;
 
     /** The name of the consumer. */
     private final String name;
     /** The queue the consumer gets its goods from. */
-    private final GoodQueue queue;
+    private final IQueue queue;
     /** A runner-variable to run the thread - and be able to stop it. */
     private boolean isRunning;
+    /** A random number generator. */
+    private ExponentialDistribution random;
 
     /**
      * The default constructor.
@@ -48,10 +53,11 @@ public class Consumer implements Runnable {
      * @param name The name of the consumer.
      * @param queue The queue/channel to the producer.
      */
-    public Consumer(String name, GoodQueue queue) {
+    public Consumer(String name, IQueue queue) {
         this.name = name;
         this.queue = queue;
         this.isRunning = true;
+        this.random = new ExponentialDistribution(WAITING_TIME);
     }
 
     /**
@@ -75,6 +81,16 @@ public class Consumer implements Runnable {
             } catch (InterruptedException e) {
                 LOGGER.info("Harsh wake-up due to an InterruptedException while waiting for new goods: ", e);
                 // Restore interrupted state. That is, set the interrupt flag of the thread, 
+                // so higher level interrupt handlers will notice it and can handle it appropriately.
+                Thread.currentThread().interrupt();
+            }
+
+            // Just wait for some time.
+            try {
+                Thread.sleep((long) random.sample());
+            } catch (InterruptedException e) {
+                LOGGER.info("Harsh wake-up due to an InterruptedException while sleeping: ", e);
+                // Restore interrupted state. That is, set the interrupt flag of the thread,
                 // so higher level interrupt handlers will notice it and can handle it appropriately.
                 Thread.currentThread().interrupt();
             }

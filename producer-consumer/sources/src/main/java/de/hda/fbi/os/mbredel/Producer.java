@@ -21,11 +21,10 @@
  */
 package de.hda.fbi.os.mbredel;
 
-import de.hda.fbi.os.mbredel.queue.GoodQueue;
+import de.hda.fbi.os.mbredel.queue.IQueue;
+import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Random;
 
 /**
  * The producer that produces goods and sends
@@ -35,9 +34,9 @@ import java.util.Random;
  */
 public class Producer implements Runnable {
     /** The logger. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(Consumer.class);
-    /** */
-    private static final int WAITING_TIME = 2000;
+    private static final Logger LOGGER = LoggerFactory.getLogger(Producer.class);
+    /** The average waiting time in ms.*/
+    private static final int WAITING_TIME = 1000;
     /** The name of the goods produced by this producer. */
     private static final String GOOD_NAME = "beer";
     /** The value of the goods produced by this producer. */
@@ -46,9 +45,11 @@ public class Producer implements Runnable {
     /** The name of the producer. */
     private final String name;
     /** The queue the producer pushes its goods to. */
-    private final GoodQueue queue;
+    private final IQueue queue;
     /** A runner-variable to run the thread - and be able to stop it. */
     private boolean isRunning;
+    /** A random number generator. */
+    private ExponentialDistribution random;
 
     /**
      * The default constructor.
@@ -56,10 +57,11 @@ public class Producer implements Runnable {
      * @param name The name of the producer.
      * @param queue The queue/channel to the consumer.
      */
-    public Producer(String name, GoodQueue queue) {
+    public Producer(String name, IQueue queue) {
         this.name = name;
         this.queue = queue;
         this.isRunning = true;
+        this.random = new ExponentialDistribution(WAITING_TIME);
     }
 
     /**
@@ -78,7 +80,6 @@ public class Producer implements Runnable {
      */
     @Override
     public void run() {
-        Random random = new Random();
 
         while(isRunning) {
             // Produce a good.
@@ -93,7 +94,7 @@ public class Producer implements Runnable {
 
             // Just wait for some time.
             try {
-                Thread.sleep(random.nextInt(WAITING_TIME));
+                Thread.sleep((long) random.sample());
             } catch (InterruptedException e) {
                 LOGGER.info("Harsh wake-up due to an InterruptedException while sleeping: ", e);
                 // Restore interrupted state. That is, set the interrupt flag of the thread, 
