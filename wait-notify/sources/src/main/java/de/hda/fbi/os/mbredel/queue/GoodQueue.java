@@ -90,7 +90,7 @@ public class GoodQueue implements IQueue {
 
     @Override
     public synchronized Good take() {
-        if (queue.isEmpty()) {
+        if (!queue.isEmpty()) {
             Good good = queue.poll();
             LOGGER.info("Removed a good [{}] from queue. Queue size is now: {}", good.getName(), queue.size());
             // Send a signal.
