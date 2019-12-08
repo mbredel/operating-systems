@@ -1,3 +1,24 @@
+/*
+ Copyright (c) 2019, Michael von Rueden, H-DA
+ ALL RIGHTS RESERVED.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+ Neither the name of the H-DA and Michael von Rueden
+ nor the names of its contributors may be used to endorse or promote
+ products derived from this software without specific prior written
+ permission.
+ */
 package de.hda.fbi.os.mbredel.computation;
 
 import org.slf4j.Logger;
@@ -40,11 +61,19 @@ public class Runner extends Thread {
         this.result = result;
         this.offset = offset;
         this.length = length;
+
+        // Check that no. of columns of the first matrix
+        // equals no. of rows of the second matrix.
+        // Otherwise, matrix multiplication is not possible.
+        // However, the code below might not recognise this.
+        if (firstMatrix[0].length != secondMatrix.length) {
+            throw new RuntimeException();
+        }
     }
 
     @Override
     public void run() {
-        LOGGER.info("Started thread: " + this);
+        LOGGER.info(String.format("Started thread: %s", this));
         for (int row = offset; row < length; row++) {
             for (int col = 0; col < result[row].length; col++) {
                 result[row][col] = multiplyMatricesCell(firstMatrix, secondMatrix, row, col);
@@ -71,7 +100,7 @@ public class Runner extends Thread {
      * @param col The index of the column of the second matrix.
      * @return The resulting value of the row/col cell of the resulting matrix.
      */
-    public int multiplyMatricesCell(int[][] firstMatrix, int[][] secondMatrix, int row, int col) {
+    private int multiplyMatricesCell(int[][] firstMatrix, int[][] secondMatrix, int row, int col) {
         int cell = 0;
 
         for (int i = 0; i < secondMatrix.length; i++) {
