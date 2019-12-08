@@ -101,31 +101,6 @@
             <artifactId>lombok</artifactId>
 	    <version>${lombok.version}</version>
         </dependency>
-        <!-- Plugin dependencies to automatically download and install the plugins needed. -->
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>${plugin.compiler.version}</version>
-            <type>maven-plugin</type>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-clean-plugin</artifactId>
-            <version>${plugin.clean.version}</version>
-            <type>maven-plugin</type>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-shade-plugin</artifactId>
-            <version>${plugin.shade.version}</version>
-            <type>maven-plugin</type>
-        </dependency>
-        <dependency>
-            <groupId>org.sonarsource.scanner.maven</groupId>
-            <artifactId>sonar-maven-plugin</artifactId>
-            <version>${plugin.sonar.version}</version>
-            <type>maven-plugin</type>
-        </dependency>
     </dependencies>
 
 </project>
