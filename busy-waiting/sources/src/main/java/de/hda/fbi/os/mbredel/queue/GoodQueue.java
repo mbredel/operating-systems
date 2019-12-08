@@ -65,7 +65,7 @@ public class GoodQueue implements IQueue {
      * @param queueSize The size of the queue.
      */
     public GoodQueue(int queueSize) {
-        this.queue = new LinkedList<Good>();
+        this.queue = new LinkedList();
         this.queueSize = queueSize;
     }
 
@@ -81,7 +81,7 @@ public class GoodQueue implements IQueue {
 
     @Override
     public synchronized Good take() {
-        if (queue.size() > 0) {
+        if (!queue.isEmpty()) {
             Good good = queue.poll();
             LOGGER.info("Removed a good [{}] from queue. Queue size is now: {}", good.getName(), queue.size());
             return good;
