@@ -49,16 +49,16 @@ public class Main {
         CliProcessor.getInstance().parseCliOptions(args);
 	
 	    // Initialize the matrices.
-	    int[][] firstMatrix = initMatrix(2000, 2000);
-	    int[][] secondMatrix = initMatrix(1000, 1000);
+	    int[][] firstMatrix = initMatrix(1500, 1000);
+	    int[][] secondMatrix = initMatrix(1000, 1500);
         int[][] result = new int[firstMatrix.length][secondMatrix[0].length];
 
         int numberOfThreads = CliParameters.getInstance().getThreads();
-        LOGGER.info("Number of threads: " + numberOfThreads);
+        LOGGER.info(String.format("Number of threads: %d", numberOfThreads));
 
         for (int i = 0; i < numberOfThreads; i++) {
-            int offset = i * Math.round(firstMatrix.length/numberOfThreads);
-            int length = Math.min((i+1) * Math.round(firstMatrix.length/numberOfThreads), firstMatrix.length);
+            int offset = i * (firstMatrix.length/numberOfThreads);
+            int length = Math.min((i+1) * (firstMatrix.length/numberOfThreads), firstMatrix.length);
             new Runner(firstMatrix, secondMatrix, result, offset, length).start();
         }
     }
