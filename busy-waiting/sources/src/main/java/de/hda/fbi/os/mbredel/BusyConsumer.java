@@ -1,0 +1,107 @@
+/*
+ Copyright (c) 2019, Michael von Rueden, H-DA
+ ALL RIGHTS RESERVED.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+ Neither the name of the H-DA and Michael von Rueden
+ nor the names of its contributors may be used to endorse or promote
+ products derived from this software without specific prior written
+ permission.
+ */
+package de.hda.fbi.os.mbredel;
+
+import de.hda.fbi.os.mbredel.queue.IQueue;
+import org.apache.commons.math3.distribution.ExponentialDistribution;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * The consumer that consumes goods produced
+ * by the producer.
+ *
+ *  @author Michael von Rueden
+ */
+public class BusyConsumer implements Runnable {
+    /** The logger. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(BusyConsumer.class);
+    /** The average waiting time in ms.*/
+    private static final int WAITING_TIME = 2000;
+
+    /** The name of the consumer. */
+    private final String name;
+    /** The queue the consumer gets its goods from. */
+    private final IQueue queue;
+    /** A runner-variable to run the thread - and be able to stop it. */
+    private boolean isRunning;
+    /** A random number generator. */
+    private ExponentialDistribution random;
+
+    /**
+     * The default constructor.
+     *
+     * @param name The name of the consumer.
+     * @param queue The queue/channel to the producer.
+     */
+    public BusyConsumer(String name, IQueue queue) {
+        this.name = name;
+        this.queue = queue;
+        this.isRunning = true;
+        this.random = new ExponentialDistribution(WAITING_TIME);
+    }
+
+    /**
+     * Consume good from the queue.
+     *
+     * @throws InterruptedException When the thread is interrupted while waiting.
+     */
+    public void consume() throws InterruptedException {
+        Good good = null;
+        while (true) {
+            good = queue.take();
+            if (good != null) {
+                break;
+            } else {
+                LOGGER.info("Consumer [{}] is busy waiting", name);
+            }
+        }
+        LOGGER.info("Consumer [{}] consume good [{}] produced by [{}]", name, good.getName(), good.getProducerName());
+    }
+
+    /**
+     * Consume goods whenever available.
+     */
+    @Override
+    public void run() {
+        while(isRunning) {
+            try {
+                this.consume();
+            } catch (InterruptedException e) {
+                LOGGER.info("Harsh wake-up due to an InterruptedException while waiting for new goods: ", e);
+                // Restore interrupted state. That is, set the interrupt flag of the thread, 
+                // so higher level interrupt handlers will notice it and can handle it appropriately.
+                Thread.currentThread().interrupt();
+            }
+
+            // Just wait for some time.
+            try {
+                Thread.sleep((long) random.sample());
+            } catch (InterruptedException e) {
+                LOGGER.info("Harsh wake-up due to an InterruptedException while sleeping: ", e);
+                // Restore interrupted state. That is, set the interrupt flag of the thread,
+                // so higher level interrupt handlers will notice it and can handle it appropriately.
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+}
