@@ -75,6 +75,7 @@ public class RunnerTest {
         exception.expect(RuntimeException.class);
         runner = new Runner(matrixB, resultBxA, result, 0, 3);
         runner = new Runner(resultAxB, resultBxA, result, 0, 3);
+        runner = new Runner(matrixA, resultAxB, result, 0, 3);
     }
 
     /**
