@@ -65,7 +65,7 @@ public class GoodQueue implements IQueue {
      * @param queueSize The size of the queue.
      */
     public GoodQueue(int queueSize) {
-        this.queue = new LinkedList();
+        this.queue = new LinkedList<>();
         this.queueSize = queueSize;
     }
 
