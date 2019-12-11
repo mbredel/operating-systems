@@ -36,12 +36,12 @@ public class QueueSemaphore implements IQueue {
     public void put(Good good) throws InterruptedException {
 
         prodSemaphore.acquire();
+        lock.lock();
         try {
-            lock.lock();
             this.queue.add(good);
-            lock.unlock();
             LOGGER.info("Added [{}] to queue. Queue size is now: {}", good.getName(), queue.size());
         } finally {
+            lock.unlock();
             consSemaphore.release();
         }
 
@@ -51,13 +51,13 @@ public class QueueSemaphore implements IQueue {
     public Good take() throws InterruptedException {
 
         consSemaphore.acquire();
+        lock.lock();
         try {
-            lock.lock();
             Good good = this.queue.poll();
-            lock.unlock();
             LOGGER.info("Removed a good [{}] from queue. Queue size is now: {}", good.getName(), queue.size());
             return good;
         } finally {
+            lock.unlock();
             prodSemaphore.release();
         }
 
