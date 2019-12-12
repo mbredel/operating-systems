@@ -42,24 +42,25 @@ public class QueueSemaphore implements IQueue {
             LOGGER.info("Added [{}] to queue. Queue size is now: {}", good.getName(), queue.size());
         } finally {
             lock.unlock();
-            consSemaphore.release();
         }
+        consSemaphore.release();
 
     }
 
     @Override
     public Good take() throws InterruptedException {
 
+        Good good;
         consSemaphore.acquire();
         lock.lock();
         try {
-            Good good = this.queue.poll();
+            good = this.queue.poll();
             LOGGER.info("Removed a good [{}] from queue. Queue size is now: {}", good.getName(), queue.size());
-            return good;
         } finally {
             lock.unlock();
-            prodSemaphore.release();
         }
+        prodSemaphore.release();
+        return good;
 
     }
 }
