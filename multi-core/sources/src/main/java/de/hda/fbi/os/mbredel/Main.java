@@ -48,9 +48,9 @@ public class Main {
         // Parse the command line arguments.
         CliProcessor.getInstance().parseCliOptions(args);
 	
-	    // Initialize the matrices.
-	    int[][] firstMatrix = initMatrix(1500, 1000);
-	    int[][] secondMatrix = initMatrix(1000, 1500);
+        // Initialize the matrices.
+        int[][] firstMatrix = initMatrix(1500, 1000);
+        int[][] secondMatrix = initMatrix(1000, 1500);
         int[][] result = new int[firstMatrix.length][secondMatrix[0].length];
 
         int numberOfThreads = CliParameters.getInstance().getThreads();
