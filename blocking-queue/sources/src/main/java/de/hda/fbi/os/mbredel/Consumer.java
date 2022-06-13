@@ -80,9 +80,6 @@ public class Consumer implements Runnable {
                 this.consume();
             } catch (InterruptedException e) {
                 LOGGER.info("Harsh wake-up due to an InterruptedException while waiting for new goods: ", e);
-                // Restore interrupted state. That is, set the interrupt flag of the thread, 
-                // so higher level interrupt handlers will notice it and can handle it appropriately.
-                Thread.currentThread().interrupt();
             }
 
             // Just wait for some time.
@@ -90,9 +87,6 @@ public class Consumer implements Runnable {
                 Thread.sleep((long) random.sample());
             } catch (InterruptedException e) {
                 LOGGER.info("Harsh wake-up due to an InterruptedException while sleeping: ", e);
-                // Restore interrupted state. That is, set the interrupt flag of the thread,
-                // so higher level interrupt handlers will notice it and can handle it appropriately.
-                Thread.currentThread().interrupt();
             }
         }
     }
